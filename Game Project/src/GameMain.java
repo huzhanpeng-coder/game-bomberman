@@ -22,7 +22,6 @@ public class GameMain extends JFrame implements ActionListener,KeyListener{
 	
 	private bomber bomberman;
 	private enemy enemy;
-	private bomber2 bombermanDown;
 	private bomb bomb_ex,bomb_ex_down,bomb_ex_up,bomb_ex_left,bomb_ex_right;
 	private walls bricks;
 	private walls2 bricks2;
@@ -318,40 +317,35 @@ public class GameMain extends JFrame implements ActionListener,KeyListener{
 							//Collision bomberman and bomb explosion
 							
 							if (((bombermanLabel.getLocation().getX()-25) == (bombLabel.getLocation().getX()-25)) && (bombermanLabel.getLocation().getY() == (bombLabel.getLocation().getY()))) {
-								bombermanDown = new bomber2();
-								bombermanImage = new ImageIcon( getClass().getResource( bombermanDown.getFilename() ) );
+								bombermanImage = new ImageIcon( getClass().getResource( "smallninja2.png" ) );
 								bombermanLabel.setIcon(bombermanImage); 
 								flag=1;
 								
 							}
 							
 							if (((bombermanLabel.getLocation().getX()-25) == (bombLabel_right.getLocation().getX()-25)) && (bombermanLabel.getLocation().getY() == (bombLabel_right.getLocation().getY()))) {
-								bombermanDown = new bomber2();
-								bombermanImage = new ImageIcon( getClass().getResource( bombermanDown.getFilename() ) );
+								bombermanImage = new ImageIcon( getClass().getResource( "smallninja2.png" ) );
 								bombermanLabel.setIcon(bombermanImage); 
 								flag=1;
 								
 							}
 							
 							if (((bombermanLabel.getLocation().getX()-25) == (bombLabel_left.getLocation().getX()-25)) && (bombermanLabel.getLocation().getY() == (bombLabel_left.getLocation().getY()))) {
-								bombermanDown = new bomber2();
-								bombermanImage = new ImageIcon( getClass().getResource( bombermanDown.getFilename() ) );
+								bombermanImage = new ImageIcon( getClass().getResource( "smallninja2.png" ) );
 								bombermanLabel.setIcon(bombermanImage);
 								flag=1;
 								
 							}
 							
 							if (((bombermanLabel.getLocation().getX()-25) == (bombLabel_up.getLocation().getX()-25)) && (bombermanLabel.getLocation().getY() == (bombLabel_up.getLocation().getY()))) {
-								bombermanDown = new bomber2();
-								bombermanImage = new ImageIcon( getClass().getResource( bombermanDown.getFilename() ) );
+								bombermanImage = new ImageIcon( getClass().getResource( "smallninja2.png" ) );
 								bombermanLabel.setIcon(bombermanImage);
 								flag=1;
 								
 							}
 							
 							if (((bombermanLabel.getLocation().getX()-25) == (bombLabel_down.getLocation().getX()-25)) && (bombermanLabel.getLocation().getY() == (bombLabel_down.getLocation().getY()))) {
-								bombermanDown = new bomber2();
-								bombermanImage = new ImageIcon( getClass().getResource( bombermanDown.getFilename() ) );
+								bombermanImage = new ImageIcon( getClass().getResource( "smallninja2.png" ) );
 								bombermanLabel.setIcon(bombermanImage);
 								flag=1;
 								

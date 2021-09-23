@@ -36,6 +36,8 @@ public class enemy extends Sprite implements Runnable{
 		// TODO Auto-generated method stub
 		
 		this.moving = true;
+		int limit = 0;
+		boolean direction = true;
 		
 		while(moving) {
 			//movement routine
@@ -44,10 +46,20 @@ public class enemy extends Sprite implements Runnable{
 			int tx= this.x;
 			int ty = this.y;
 			
-			tx += 10;
 			
-			//this.x = tx;
-			//this.y = ty;
+			if (direction) {
+				tx += 100;
+				limit += 100;
+				if(limit>=100) {
+					direction=false;
+				}
+			} else {
+				tx -= 100;
+				limit -= 100;
+				if(limit<0) {
+					direction=true;
+				}
+			}
 			
 			this.setX(tx);
 			this.setY(ty);
@@ -55,7 +67,7 @@ public class enemy extends Sprite implements Runnable{
 			enemyLabel.setLocation(this.x,this.y);
 			
 			try {
-				Thread.sleep(200);
+				Thread.sleep(600);
 			} catch(Exception e) { 
 				
 			}
