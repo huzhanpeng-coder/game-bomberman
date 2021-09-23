@@ -1,5 +1,7 @@
 import java.awt.Color;
 import java.awt.Container;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 import java.util.Timer;
@@ -11,7 +13,7 @@ import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 
-public class GameMain extends JFrame implements KeyListener{
+public class GameMain extends JFrame implements ActionListener,KeyListener{
 
 	/**
 	 * 
@@ -29,6 +31,7 @@ public class GameMain extends JFrame implements KeyListener{
 	private int flag=0;
 	//labels to show the graphics
 	private JLabel bombermanLabel,enemyLabel, bombLabel,bombLabel_up,bombLabel_down,bombLabel_right,bombLabel_left;
+	private JButton Start;
 	private JLabel[][] brickLabel = new JLabel[map.length][map[0].length];
 	private ImageIcon bombermanImage, bricksImage, emptyImage, bombImage, enemyImage;
 	
@@ -55,6 +58,8 @@ public class GameMain extends JFrame implements KeyListener{
 		enemyLabel.setIcon(enemyImage); 
 		enemyLabel.setSize(enemy.getWidth(),enemy.getHeight());	
 		
+		enemy.setEnemyLabel(enemyLabel);
+		
 		bomb_ex = new bomb();
 		bombLabel = new JLabel();
 		bombImage = new ImageIcon( getClass().getResource( bricks2.getFilename() ) ); // The image is bricks2 to make the bomb invisible
@@ -80,6 +85,14 @@ public class GameMain extends JFrame implements KeyListener{
 		bombLabel_left = new JLabel();
 		bombLabel_left.setIcon(bombImage); 
 		bombLabel_left.setSize(bomb_ex_left.getWidth(),bomb_ex_left.getHeight());
+		
+		Start = new JButton("Run");
+		Start.setSize(100,50);
+		Start.setLocation(GameProperties.SCREEN_WIDTH-150,GameProperties.SCREEN_HEIGHT-150);
+		add(Start);
+		Start.addActionListener(this);
+		Start.setFocusable(false);
+		
 		
 		this.addKeyListener(this);
 		
@@ -378,7 +391,22 @@ public class GameMain extends JFrame implements KeyListener{
 		
 	}
 
-
+	public void actionPerformed(ActionEvent e) {
+		// TODO Auto-generated method stub
+		if(e.getSource() == Start) {
+			
+			if (enemy.getMoving()) {
+				//tardis is moving, stop , change button text to run
+				enemy.setMoving(false);
+				Start.setText("Run");
+			} else {
+				//tardis is not moving. start, change button text to stop
+				Start.setText("Stop");
+				enemy.moveEnemy();
+			}
+			
+		}
+	}
 	@Override
 	public void keyTyped(KeyEvent e) {
 		// TODO Auto-generated method stub
