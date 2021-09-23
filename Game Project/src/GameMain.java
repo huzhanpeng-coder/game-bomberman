@@ -19,20 +19,18 @@ public class GameMain extends JFrame implements KeyListener{
 	private static final long serialVersionUID = -925518549680460124L;
 	
 	private bomber bomberman;
+	private enemy enemy;
 	private bomber2 bombermanDown;
 	private bomb bomb_ex,bomb_ex_down,bomb_ex_up,bomb_ex_left,bomb_ex_right;
 	private walls bricks;
 	private walls2 bricks2;
-	private int[][] map = { {0,0,1,0,1,1,1,1},{0,1,1,0,0,1,1,1},{0,1,0,0,0,1,1,1},{0,1,0,0,0,1,1,1},{0,1,0,0,1,0,1,1},{0,1,0,1,1,1,1,1} };
+	private int[][] map = { {0,0,1,0,1,1,1,1},{0,1,1,0,0,1,1,1},{0,1,0,0,0,1,1,1},{0,0,0,0,1,1,1,1},{0,1,0,0,1,0,1,1},{0,1,0,1,1,1,1,1} };
 	private int[][]bombermanPosition = {{1,0,0,0,0,0,0,0},{0,0,0,0,0,0,0,0},{0,0,0,0,0,0,0,0},{0,0,0,0,0,0,0,0},{0,0,0,0,0,0,0,0},{0,0,0,0,0,0,0,0}};
 	private int flag=0;
 	//labels to show the graphics
-	private JLabel bombermanLabel,bombLabel,bombLabel_up,bombLabel_down,bombLabel_right,bombLabel_left;
+	private JLabel bombermanLabel,enemyLabel, bombLabel,bombLabel_up,bombLabel_down,bombLabel_right,bombLabel_left;
 	private JLabel[][] brickLabel = new JLabel[map.length][map[0].length];
-	private ImageIcon bombermanImage, bricksImage, emptyImage, bombImage;
-	
-	//button to control 
-	private JButton HideTardisButton;
+	private ImageIcon bombermanImage, bricksImage, emptyImage, bombImage, enemyImage;
 	
 	//container to hold graphics
 	private Container content;
@@ -50,6 +48,12 @@ public class GameMain extends JFrame implements KeyListener{
 		bombermanImage = new ImageIcon( getClass().getResource( bomberman.getFilename() ) );
 		bombermanLabel.setIcon(bombermanImage); 
 		bombermanLabel.setSize(bomberman.getWidth(),bomberman.getHeight());	
+		
+		enemy = new enemy ();
+		enemyLabel = new JLabel();
+		enemyImage = new ImageIcon( getClass().getResource( enemy.getFilename() ) );
+		enemyLabel.setIcon(enemyImage); 
+		enemyLabel.setSize(enemy.getWidth(),enemy.getHeight());	
 		
 		bomb_ex = new bomb();
 		bombLabel = new JLabel();
@@ -115,16 +119,22 @@ public class GameMain extends JFrame implements KeyListener{
 		bomberman.setX(25);
 		bomberman.setY(0);
 		
+		enemy.setX(125);
+		enemy.setY(300);
+		
 		bomb_ex.setX(0);
 		bomb_ex.setY(0);
 		
 		
 		add(bombermanLabel);
+		add(enemyLabel);
 		add(bombLabel);
 		add(bombLabel_up);
 		add(bombLabel_down);
 		add(bombLabel_left);
 		add(bombLabel_right);
+		
+		
 		
 		for (int i=0; i< map.length ; i++) {
 			for (int j=0; j< map[i].length ; j++) {
@@ -135,6 +145,7 @@ public class GameMain extends JFrame implements KeyListener{
 		//update the label position to match the stored values
 		
 		bombermanLabel.setLocation(bomberman.getX(), bomberman.getY());
+		enemyLabel.setLocation(enemy.getX(),enemy.getY());
 		bombLabel.setLocation(bomb_ex.getX(), bomb_ex.getY());
 		bombLabel_up.setLocation(bomb_ex_up.getX(), bomb_ex_up.getY());
 		bombLabel_down.setLocation(bomb_ex_down.getX(), bomb_ex_down.getY());
