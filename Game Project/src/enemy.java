@@ -7,6 +7,8 @@ public class enemy extends Sprite implements Runnable{
 	private Boolean moving;
 	private Thread t;
 	private JLabel enemyLabel;
+	private int limit = 0;
+	private Boolean direction;
 	
 	public Boolean getMoving() {return moving;}
 	public void setMoving(Boolean moving) {	this.moving = moving;}
@@ -17,11 +19,13 @@ public class enemy extends Sprite implements Runnable{
 	public enemy() {
 		   super(75,100,"enemy.png");
 		   this.moving=false;
+		   this.direction=true;
 	}
 	
 	public enemy(JLabel temp) {
 		   super(75,100,"enemy.png");
 		   this.moving=false;
+		   this.direction=true;
 		   this.enemyLabel= temp;
 	 }
 	
@@ -36,8 +40,6 @@ public class enemy extends Sprite implements Runnable{
 		// TODO Auto-generated method stub
 		
 		this.moving = true;
-		int limit = 0;
-		boolean direction = true;
 		
 		while(moving) {
 			//movement routine
