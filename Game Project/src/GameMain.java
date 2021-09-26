@@ -56,6 +56,8 @@ public class GameMain extends JFrame implements ActionListener,KeyListener{
 		enemyLabel.setSize(enemy.getWidth(),enemy.getHeight());	
 		
 		enemy.setEnemyLabel(enemyLabel);
+		enemy.setBomberman(bomberman);
+		enemy.setBombermanLabel(bombermanLabel);
 		
 		bomb_ex = new bomb();
 		bombLabel = new JLabel();
@@ -89,6 +91,7 @@ public class GameMain extends JFrame implements ActionListener,KeyListener{
 		add(startButton);
 		startButton.addActionListener(this);
 		startButton.setFocusable(false);
+		enemy.setAnimationButton(startButton);
 		
 		
 		this.addKeyListener(this);
