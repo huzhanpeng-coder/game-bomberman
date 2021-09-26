@@ -24,8 +24,8 @@ public class GameMain extends JFrame implements ActionListener,KeyListener{
 	private enemy enemy;
 	private bomb bomb_ex,bomb_ex_down,bomb_ex_up,bomb_ex_left,bomb_ex_right;
 	private walls bricks;
-	private int[][] map = { {0,0,1,0,1,1,1,1},{0,1,1,0,0,1,1,1},{0,1,0,0,0,1,1,1},{0,0,0,0,1,1,1,1},{0,1,0,0,1,0,1,1},{0,1,0,1,1,1,1,1} };
-	private int[][]bombermanPosition = {{1,0,0,0,0,0,0,0},{0,0,0,0,0,0,0,0},{0,0,0,0,0,0,0,0},{0,0,0,0,0,0,0,0},{0,0,0,0,0,0,0,0},{0,0,0,0,0,0,0,0}};
+	private int[][] map = { {0,0,1,0,1,1,1,1,1,0,1},{0,1,1,0,0,1,1,1,1,0,1},{0,1,0,0,0,1,1,1,1,0,1},{0,0,0,0,1,1,1,1,1,0,1},{0,1,0,0,1,0,1,1,1,0,1},{0,1,0,1,1,1,1,1,1,0,1},{0,1,0,1,1,1,1,1,1,0,1} };
+	private int[][]bombermanPosition = {{1,0,0,0,0,0,0,0,0,0,0},{0,0,0,0,0,0,0,0,0,0,0},{0,0,0,0,0,0,0,0,0,0,0},{0,0,0,0,0,0,0,0,0,0,0},{0,0,0,0,0,0,0,0,0,0,0},{0,0,0,0,0,0,0,0,0,0,0}};
 	private int flag=0; //flag to identify when the game is over 
 	//labels to show the graphics
 	private JLabel bombermanLabel,enemyLabel, bombLabel,bombLabel_up,bombLabel_down,bombLabel_right,bombLabel_left;
