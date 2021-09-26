@@ -4,7 +4,7 @@ import javax.swing.JLabel;
 
 public class enemy extends Sprite implements Runnable{
 	
-	private Boolean moving;
+	private Boolean moving, alive;
 	private Thread t;
 	private JLabel enemyLabel, bombermanLabel, bombLabel;
 	private int limit = 0;
@@ -14,6 +14,7 @@ public class enemy extends Sprite implements Runnable{
 	private bomb bomb, bomb_ex_right, bomb_ex_left, bomb_ex_up, bomb_ex_down;
 	
 	public Boolean getMoving() {return moving;}
+	public Boolean getAlive() {return alive;}
 	public int getLimit() {return limit;}
 	
 	public void setMoving(Boolean moving) {	this.moving = moving;}
@@ -39,12 +40,14 @@ public class enemy extends Sprite implements Runnable{
 		   super(75,100,"enemy.png");
 		   this.moving=false;
 		   this.direction=true;
+		   this.alive=true;
 	}
 	
 	public enemy(JLabel temp) {
 		   super(75,100,"enemy.png");
 		   this.moving=false;
 		   this.direction=true;
+		   this.alive=true;
 		   this.enemyLabel= temp;
 	 }
 	
@@ -86,12 +89,15 @@ public class enemy extends Sprite implements Runnable{
 			this.setY(ty);
 			
 			enemyLabel.setLocation(this.x,this.y);
-			detectBombermanCollision();
-			detectBombCollision();
-			detectBombExplosion();
+			
+			if (alive== true) {
+				detectBombermanCollision();
+				detectBombCollision();
+				detectBombExplosion();
+			}
 			
 			try {
-				Thread.sleep(100);
+				Thread.sleep(200);
 			} catch(Exception e) { 
 				
 			}
@@ -109,9 +115,9 @@ public class enemy extends Sprite implements Runnable{
 		}
 	}
 	
+	// detect bomb and change direction of enemy so they do not share same space
 	private void detectBombCollision() {
 		if(this.r.intersects(bomb.getRectangle())) {
-			System.out.println("Boom!");
 			direction = !direction;
 			//enemyLabel.setIcon( new ImageIcon( getClass().getResource("enemy.png")));
 			//enemyLabel.setIcon( new ImageIcon( getClass().getResource("enemy2.png")));
@@ -119,11 +125,13 @@ public class enemy extends Sprite implements Runnable{
 		}
 	}
 	
+	//detect if explosion reaches enemy
 	private void detectBombExplosion() {
-		if(this.r.intersects(bomb_ex_right.getRectangle()) || this.r.intersects(bomb_ex_right.getRectangle()) ||
+		if(this.r.intersects(bomb_ex_right.getRectangle()) || this.r.intersects(bomb_ex_left.getRectangle()) ||
 			this.r.intersects(bomb_ex_down.getRectangle()) || this.r.intersects(bomb_ex_up.getRectangle())) {
 			System.out.println("Boom!");
 			this.moving=false;
+			this.alive =false;
 			//enemyLabel.setIcon( new ImageIcon( getClass().getResource("enemy.png")));
 			enemyLabel.setIcon( new ImageIcon( getClass().getResource("enemy2.png")));
 			

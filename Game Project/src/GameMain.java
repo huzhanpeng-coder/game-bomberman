@@ -25,7 +25,7 @@ public class GameMain extends JFrame implements ActionListener,KeyListener{
 	private bomb bomb_ex,bomb_ex_down,bomb_ex_up,bomb_ex_left,bomb_ex_right;
 	private walls bricks;
 	private int[][] map = { {0,0,1,0,1,1,1,1,1,0,1},{0,1,1,0,0,1,1,1,1,0,1},{0,1,0,0,0,1,1,1,1,0,1},{0,0,0,0,1,1,1,1,1,0,1},{0,1,0,0,1,0,1,1,1,0,1},{0,1,0,1,1,1,1,1,1,0,1},{0,1,0,1,1,1,1,1,1,0,1} };
-	private int[][]bombermanPosition = {{1,0,0,0,0,0,0,0,0,0,0},{0,0,0,0,0,0,0,0,0,0,0},{0,0,0,0,0,0,0,0,0,0,0},{0,0,0,0,0,0,0,0,0,0,0},{0,0,0,0,0,0,0,0,0,0,0},{0,0,0,0,0,0,0,0,0,0,0}};
+	private int[][]bombermanPosition = {{1,0,0,0,0,0,0,0,0,0,0},{0,0,0,0,0,0,0,0,0,0,0},{0,0,0,0,0,0,0,0,0,0,0},{0,0,0,0,0,0,0,0,0,0,0},{0,0,0,0,0,0,0,0,0,0,0},{0,0,0,0,0,0,0,0,0,0,0},{0,0,0,0,0,0,0,0,0,0,0}};
 	private int flag=0; //flag to identify when the game is over 
 	//labels to show the graphics
 	private JLabel bombermanLabel,enemyLabel, bombLabel,bombLabel_up,bombLabel_down,bombLabel_right,bombLabel_left;
@@ -102,6 +102,7 @@ public class GameMain extends JFrame implements ActionListener,KeyListener{
 		bricksImage = new ImageIcon( getClass().getResource( bricks.getFilename() ) );
 		emptyImage = new ImageIcon( getClass().getResource( "white.png" ) );
 		
+		//setting values to the bricks label according to the map
 		for (int i=0; i< map.length ; i++) {
 			
 			for (int j=0; j< map[i].length ; j++) {
@@ -399,9 +400,15 @@ public class GameMain extends JFrame implements ActionListener,KeyListener{
 					bombLabel_right.setLocation(bomb_ex_right.getX(), bomb_ex_right.getY());
 					bombLabel_left.setLocation(bomb_ex_left.getX(), bomb_ex_left.getY());
 					
-					bombImage = new ImageIcon( getClass().getResource( "white.png" ) );
-					bombLabel.setIcon(bombImage); 
-					bombLabel.setSize(bomb_ex.getWidth(),bomb_ex.getHeight());
+					bombLabel.setIcon(emptyImage); 
+					bombLabel_up.setIcon(emptyImage);
+					bombLabel_down.setIcon(emptyImage);
+					bombLabel_right.setIcon(emptyImage);
+					bombLabel_left.setIcon(emptyImage);
+					
+					if (enemy.getAlive()==false) {
+						enemyLabel.setIcon(emptyImage);
+					}
 										
 					if (flag==1) {
 						JOptionPane.showMessageDialog(null, "GAME OVER!");
