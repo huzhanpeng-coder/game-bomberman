@@ -55,18 +55,6 @@ public class GameMain extends JFrame implements ActionListener,KeyListener{
 		bombLabel.setIcon(bombImage); 
 		bombLabel.setSize(bomb_ex.getWidth(),bomb_ex.getHeight());
 		
-		enemy = new enemy ();
-		enemyLabel = new JLabel();
-		enemyImage = new ImageIcon( getClass().getResource( enemy.getFilename() ) );
-		enemyLabel.setIcon(enemyImage); 
-		enemyLabel.setSize(enemy.getWidth(),enemy.getHeight());	
-		
-		enemy.setEnemyLabel(enemyLabel);
-		enemy.setBomberman(bomberman);
-		enemy.setBombermanLabel(bombermanLabel);
-		enemy.setBomb(bomb_ex);
-		enemy.setBombLabel(bombLabel);
-		
 		bomb_ex_up = new bomb();
 		bombLabel_up = new JLabel();
 		bombLabel_up.setIcon(bombImage); 
@@ -86,6 +74,19 @@ public class GameMain extends JFrame implements ActionListener,KeyListener{
 		bombLabel_left = new JLabel();
 		bombLabel_left.setIcon(bombImage); 
 		bombLabel_left.setSize(bomb_ex_left.getWidth(),bomb_ex_left.getHeight());
+		
+		enemy = new enemy ();
+		enemyLabel = new JLabel();
+		enemyImage = new ImageIcon( getClass().getResource( enemy.getFilename() ) );
+		enemyLabel.setIcon(enemyImage); 
+		enemyLabel.setSize(enemy.getWidth(),enemy.getHeight());	
+		
+		enemy.setEnemyLabel(enemyLabel);
+		enemy.setBomberman(bomberman);
+		enemy.setBombermanLabel(bombermanLabel);
+		enemy.setBomb(bomb_ex);
+		enemy.setBombLabel(bombLabel);
+		enemy.setBombEx(bomb_ex_right,bomb_ex_left,bomb_ex_up, bomb_ex_down);
 		
 		startButton = new JButton("Start");
 		startButton.setSize(100,50);
@@ -161,6 +162,7 @@ public class GameMain extends JFrame implements ActionListener,KeyListener{
 		
 		bombermanLabel.setLocation(bomberman.getX(), bomberman.getY());
 		enemyLabel.setLocation(enemy.getX(),enemy.getY());
+		
 		bombLabel.setLocation(bomb_ex.getX(), bomb_ex.getY());
 		bombLabel_up.setLocation(bomb_ex_up.getX(), bomb_ex_up.getY());
 		bombLabel_down.setLocation(bomb_ex_down.getX(), bomb_ex_down.getY());
@@ -195,7 +197,6 @@ public class GameMain extends JFrame implements ActionListener,KeyListener{
 							if(map[i+1][j]==0) {    // check if the next space is available
 								bombermanPosition[i][j]=0;
 								bombermanPosition[i+1][j]=1;
-								System.out.printf("%d and %d and %d \n", i , j , bombermanPosition[i+1][j]);
 								bomberman.setY(bomberman.getY()+GameProperties.CHARACTER_STEP);
 								bombermanLabel.setLocation(bomberman.getX(), bomberman.getY());
 								break loop;// Once the position for bomberman has changed then finish loop to keep bomberman from moving further
@@ -364,17 +365,44 @@ public class GameMain extends JFrame implements ActionListener,KeyListener{
 							}
 						}
 					}
+					
+					//setting the position of the explosions
+					
+					bomb_ex_right.setX(bombLabel.getX()+100);
+					bomb_ex_right.setY(bombLabel.getY());
+					bomb_ex_down.setX(bombLabel.getX()); 
+					bomb_ex_down.setY(bombLabel.getY()+100);
+					bomb_ex_up.setX(bombLabel.getX()); 
+					bomb_ex_up.setY(bombLabel.getY()-100);
+					bomb_ex_left.setX(bombLabel.getX()-100); 
+					bomb_ex_left.setY(bombLabel.getY());
 				}
 			};
 			
 			TimerTask task2 = new TimerTask(){
 				public void run() {
-					bombLabel.setIcon(emptyImage); 
-					bombLabel_up.setIcon(emptyImage); 
-					bombLabel_down.setIcon(emptyImage); 
-					bombLabel_left.setIcon(emptyImage);
-					bombLabel_right.setIcon(emptyImage);
+					bomb_ex.setX(0);
+					bomb_ex.setY(0);
 					
+					bomb_ex_right.setX(0);
+					bomb_ex_right.setY(0);
+					bomb_ex_down.setX(0); 
+					bomb_ex_down.setY(0);
+					bomb_ex_up.setX(0); 
+					bomb_ex_up.setY(0);
+					bomb_ex_left.setX(0); 
+					bomb_ex_left.setY(0);
+					
+					bombLabel.setLocation(bomb_ex.getX(), bomb_ex.getY());
+					bombLabel_up.setLocation(bomb_ex_up.getX(), bomb_ex_up.getY());
+					bombLabel_down.setLocation(bomb_ex_down.getX(), bomb_ex_down.getY());
+					bombLabel_right.setLocation(bomb_ex_right.getX(), bomb_ex_right.getY());
+					bombLabel_left.setLocation(bomb_ex_left.getX(), bomb_ex_left.getY());
+					
+					bombImage = new ImageIcon( getClass().getResource( "white.png" ) );
+					bombLabel.setIcon(bombImage); 
+					bombLabel.setSize(bomb_ex.getWidth(),bomb_ex.getHeight());
+										
 					if (flag==1) {
 						JOptionPane.showMessageDialog(null, "GAME OVER!");
 					}
@@ -383,16 +411,21 @@ public class GameMain extends JFrame implements ActionListener,KeyListener{
 			
 			//initial bomb 
 			bombImage = new ImageIcon( getClass().getResource( bomb_ex.getFilename() ) );
-			bombLabel.setIcon(bombImage); 
+			bombLabel.setIcon(bombImage);
+			//place the bomb in the same place the bomberman is located
 			bombLabel.setLocation(bomberman.getX(), bomberman.getY());
+			//giving values X and Y so it can recognize collision with rectangles
 			bomb_ex.setX(bomberman.getX());
 			bomb_ex.setY(bomberman.getY());
+			
 			
 			// explosion and collisions with walls and bomberman
 			timer.schedule(task, 1000);
 			
 			// reseting the bomb image
 			timer.schedule(task2, 2000);
+			
+			
 			
 		}
 		

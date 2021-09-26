@@ -11,16 +11,22 @@ public class enemy extends Sprite implements Runnable{
 	private Boolean direction;
 	private JButton animationButton;
 	private bomber bomberman;
-	private bomb bomb;
+	private bomb bomb, bomb_ex_right, bomb_ex_left, bomb_ex_up, bomb_ex_down;
 	
 	public Boolean getMoving() {return moving;}
 	public int getLimit() {return limit;}
 	
 	public void setMoving(Boolean moving) {	this.moving = moving;}
 	
-	//Work with bomberman features
+	//Work with bomb, bomb explosion and bomberman features
 	public void setBomberman (bomber temp) {this.bomberman=temp;}
 	public void setBomb(bomb temp) {this.bomb= temp;}
+	public void setBombEx(bomb temp, bomb temp2, bomb temp3, bomb temp4) {
+		this.bomb_ex_right= temp;
+		this.bomb_ex_left= temp2;
+		this.bomb_ex_up= temp3;
+		this.bomb_ex_down= temp4;
+	}
 	
 	public void setEnemyLabel(JLabel temp) {this.enemyLabel = temp;}
 	public void setBombermanLabel(JLabel temp) {this.bombermanLabel = temp;}
@@ -82,9 +88,10 @@ public class enemy extends Sprite implements Runnable{
 			enemyLabel.setLocation(this.x,this.y);
 			detectBombermanCollision();
 			detectBombCollision();
+			detectBombExplosion();
 			
 			try {
-				Thread.sleep(50);
+				Thread.sleep(100);
 			} catch(Exception e) { 
 				
 			}
@@ -105,10 +112,24 @@ public class enemy extends Sprite implements Runnable{
 	private void detectBombCollision() {
 		if(this.r.intersects(bomb.getRectangle())) {
 			System.out.println("Boom!");
-			this.moving = false;
+			direction = !direction;
 			//enemyLabel.setIcon( new ImageIcon( getClass().getResource("enemy.png")));
-			bombLabel.setIcon( new ImageIcon( getClass().getResource("smallninja2.png")));
+			//enemyLabel.setIcon( new ImageIcon( getClass().getResource("enemy2.png")));
 			
 		}
 	}
+	
+	private void detectBombExplosion() {
+		if(this.r.intersects(bomb_ex_right.getRectangle()) || this.r.intersects(bomb_ex_right.getRectangle()) ||
+			this.r.intersects(bomb_ex_down.getRectangle()) || this.r.intersects(bomb_ex_up.getRectangle())) {
+			System.out.println("Boom!");
+			this.moving=false;
+			//enemyLabel.setIcon( new ImageIcon( getClass().getResource("enemy.png")));
+			enemyLabel.setIcon( new ImageIcon( getClass().getResource("enemy2.png")));
+			
+		}
+		
+	}
+	
+	
 }
