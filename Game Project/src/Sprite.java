@@ -16,6 +16,7 @@ public class Sprite {
 	
 	public void setX(int x) {this.x = x; this.r.setLocation(this.x,this.y);}
 	public void setY(int y) {this.y = y; this.r.setLocation(this.x,this.y);}
+	public void setCoordinates (int x, int y) {this.x = x; this.y = y; this.r.setLocation(this.x,this.y);}
 	public void setWidth(int width) {	this.width = width; this.r.setSize(this.width,this.height);}
 	public void setHeight(int height) {this.height = height; this.r.setSize(this.width,this.height);}
 	public void setFilename(String filename) {this.filename = filename;}
