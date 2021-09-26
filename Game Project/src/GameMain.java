@@ -49,6 +49,12 @@ public class GameMain extends JFrame implements ActionListener,KeyListener{
 		bombermanLabel.setIcon(bombermanImage); 
 		bombermanLabel.setSize(bomberman.getWidth(),bomberman.getHeight());	
 		
+		bomb_ex = new bomb();
+		bombLabel = new JLabel();
+		bombImage = new ImageIcon( getClass().getResource( "white.png" ) ); // The image is bricks2 to make the bomb invisible
+		bombLabel.setIcon(bombImage); 
+		bombLabel.setSize(bomb_ex.getWidth(),bomb_ex.getHeight());
+		
 		enemy = new enemy ();
 		enemyLabel = new JLabel();
 		enemyImage = new ImageIcon( getClass().getResource( enemy.getFilename() ) );
@@ -58,12 +64,8 @@ public class GameMain extends JFrame implements ActionListener,KeyListener{
 		enemy.setEnemyLabel(enemyLabel);
 		enemy.setBomberman(bomberman);
 		enemy.setBombermanLabel(bombermanLabel);
-		
-		bomb_ex = new bomb();
-		bombLabel = new JLabel();
-		bombImage = new ImageIcon( getClass().getResource( "white.png" ) ); // The image is bricks2 to make the bomb invisible
-		bombLabel.setIcon(bombImage); 
-		bombLabel.setSize(bomb_ex.getWidth(),bomb_ex.getHeight());
+		enemy.setBomb(bomb_ex);
+		enemy.setBombLabel(bombLabel);
 		
 		bomb_ex_up = new bomb();
 		bombLabel_up = new JLabel();
@@ -383,7 +385,8 @@ public class GameMain extends JFrame implements ActionListener,KeyListener{
 			bombImage = new ImageIcon( getClass().getResource( bomb_ex.getFilename() ) );
 			bombLabel.setIcon(bombImage); 
 			bombLabel.setLocation(bomberman.getX(), bomberman.getY());
-			
+			bomb_ex.setX(bomberman.getX());
+			bomb_ex.setY(bomberman.getY());
 			
 			// explosion and collisions with walls and bomberman
 			timer.schedule(task, 1000);

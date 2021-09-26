@@ -6,21 +6,27 @@ public class enemy extends Sprite implements Runnable{
 	
 	private Boolean moving;
 	private Thread t;
-	private JLabel enemyLabel, bombermanLabel;
+	private JLabel enemyLabel, bombermanLabel, bombLabel;
 	private int limit = 0;
 	private Boolean direction;
 	private JButton animationButton;
 	private bomber bomberman;
+	private bomb bomb;
 	
 	public Boolean getMoving() {return moving;}
+	public int getLimit() {return limit;}
 	
 	public void setMoving(Boolean moving) {	this.moving = moving;}
 	
+	//Work with bomberman features
 	public void setBomberman (bomber temp) {this.bomberman=temp;}
+	public void setBomb(bomb temp) {this.bomb= temp;}
 	
 	public void setEnemyLabel(JLabel temp) {this.enemyLabel = temp;}
 	public void setBombermanLabel(JLabel temp) {this.bombermanLabel = temp;}
+	public void setBombLabel(JLabel temp) {this.bombLabel= temp;}
 	public void setAnimationButton(JButton temp) {this.animationButton = temp;}
+	public void setLimit(int temp) {this.limit = temp;}
 	
 	
 	public enemy() {
@@ -75,6 +81,7 @@ public class enemy extends Sprite implements Runnable{
 			
 			enemyLabel.setLocation(this.x,this.y);
 			detectBombermanCollision();
+			detectBombCollision();
 			
 			try {
 				Thread.sleep(50);
@@ -91,6 +98,16 @@ public class enemy extends Sprite implements Runnable{
 			animationButton.setText("Run");
 			//enemyLabel.setIcon( new ImageIcon( getClass().getResource("enemy.png")));
 			bombermanLabel.setIcon( new ImageIcon( getClass().getResource("smallninja2.png")));
+			
+		}
+	}
+	
+	private void detectBombCollision() {
+		if(this.r.intersects(bomb.getRectangle())) {
+			System.out.println("Boom!");
+			this.moving = false;
+			//enemyLabel.setIcon( new ImageIcon( getClass().getResource("enemy.png")));
+			bombLabel.setIcon( new ImageIcon( getClass().getResource("smallninja2.png")));
 			
 		}
 	}
