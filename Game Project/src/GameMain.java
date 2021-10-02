@@ -41,47 +41,53 @@ public class GameMain extends JFrame implements ActionListener,KeyListener{
 		super("Bomberman");
 		setSize(GameProperties.SCREEN_WIDTH, GameProperties.SCREEN_HEIGHT);
 		
+		/////////////////////////////////////////////////Maze///////////////////////////////////////////////////////
+		
 		bricks = new walls();
 		bricksImage = new ImageIcon( getClass().getResource( bricks.getFilename() ) );
 		bricksImage2 = new ImageIcon( getClass().getResource( "walls2.png" ) );
 		emptyImage = new ImageIcon( getClass().getResource( "white.png" ) );
 		
 		//setting values to the bricks label according to the map
-				for (int i=0; i< map.length ; i++) {
-					
-					for (int j=0; j< map[i].length ; j++) {
-						if( map[i][j]==1) {
+		for (int i=0; i< map.length ; i++) {
+			
+			for (int j=0; j< map[i].length ; j++) {
+				if( map[i][j]==1) {
+					brickLabel[i][j] = new JLabel();
+					brickLabel[i][j].setIcon(bricksImage);
+					brickLabel[i][j].setSize(bricks.getWidth(),bricks.getHeight());
+					}else if( map[i][j]==2) {
+						brickLabel[i][j] = new JLabel();
+						brickLabel[i][j].setIcon(bricksImage2);
+						brickLabel[i][j].setSize(bricks.getWidth(),bricks.getHeight());
+					} else {
 							brickLabel[i][j] = new JLabel();
-							brickLabel[i][j].setIcon(bricksImage);
-							brickLabel[i][j].setSize(bricks.getWidth(),bricks.getHeight());
-							}else if( map[i][j]==2) {
-								brickLabel[i][j] = new JLabel();
-								brickLabel[i][j].setIcon(bricksImage2);
-								brickLabel[i][j].setSize(bricks.getWidth(),bricks.getHeight());
-							} else {
-									brickLabel[i][j] = new JLabel();
-									brickLabel[i][j].setIcon(emptyImage);
-									brickLabel[i][j].setSize(bricks.getWidth(),bricks.getHeight());	
-								}
-						if( j==0 ) {
-							bricks.setX(bricks.getX());
-							brickLabel[i][j].setLocation(bricks.getX(), bricks.getY());
-						}else {
-							bricks.setX(bricks.getX()+100);
-							brickLabel[i][j].setLocation(bricks.getX(), bricks.getY());
-							}
+							brickLabel[i][j].setIcon(emptyImage);
+							brickLabel[i][j].setSize(bricks.getWidth(),bricks.getHeight());	
+						}
+				if( j==0 ) {
+					bricks.setX(bricks.getX());
+					brickLabel[i][j].setLocation(bricks.getX(), bricks.getY());
+				}else {
+					bricks.setX(bricks.getX()+100);
+					brickLabel[i][j].setLocation(bricks.getX(), bricks.getY());
 					}
-					bricks.setX(0);
-					bricks.setY(bricks.getY()+100);
-				}
+			}
+			bricks.setX(0);
+			bricks.setY(bricks.getY()+100);
+		}
 		
+		/////////////////////////////////////////////////Bomberman///////////////////////////////////////////////////////
 		bomberman = new bomber();
 		bombermanLabel = new JLabel();
 		bombermanImage = new ImageIcon( getClass().getResource( bomberman.getFilename() ) );
 		bombermanLabel.setIcon(bombermanImage); 
 		bombermanLabel.setSize(bomberman.getWidth(),bomberman.getHeight());	
+		bombermanLabel.setVisible(bomberman.getVisible());
 		
 		bombermanDownImage = new ImageIcon( getClass().getResource( "smallninja2.png" ) );
+		
+		/////////////////////////////////////////////////Bomb///////////////////////////////////////////////////////
 		
 		bomb_ex = new bomb();
 		bombLabel = new JLabel();
@@ -108,6 +114,7 @@ public class GameMain extends JFrame implements ActionListener,KeyListener{
 		bombLabel_left.setIcon(emptyImage); 
 		bombLabel_left.setSize(bomb_ex_left.getWidth(),bomb_ex_left.getHeight());
 		
+		/////////////////////////////////////////////////Enemy///////////////////////////////////////////////////////
 		enemy = new enemy ();
 		enemyLabel = new JLabel();
 		enemyImage = new ImageIcon( getClass().getResource( enemy.getFilename() ) );
@@ -120,6 +127,7 @@ public class GameMain extends JFrame implements ActionListener,KeyListener{
 		enemy.setBomb(bomb_ex); //collision for initial bomb
 		enemy.setBombLabel(bombLabel);
 		enemy.setBombEx(bomb_ex_right,bomb_ex_left,bomb_ex_up, bomb_ex_down);//for collision with the explosion
+		enemyLabel.setVisible(enemy.getVisible());
 		
 		enemy2 = new enemy ();
 		enemy2Label = new JLabel();
@@ -132,6 +140,9 @@ public class GameMain extends JFrame implements ActionListener,KeyListener{
 		enemy2.setBomb(bomb_ex);
 		enemy2.setBombLabel(bombLabel);
 		enemy2.setBombEx(bomb_ex_right,bomb_ex_left,bomb_ex_up, bomb_ex_down);
+		enemy2Label.setVisible(enemy2.getVisible());
+		
+		/////////////////////////////////////////////////Interface///////////////////////////////////////////////////////
 		
 		startButton = new JButton("Start");
 		startButton.setSize(100,50);
@@ -154,7 +165,7 @@ public class GameMain extends JFrame implements ActionListener,KeyListener{
 		enemy2.setCoordinates(425, 200);
 		bomb_ex.setCoordinates(0, 0);
 		
-				
+		//adding labels 		
 		add(bombermanLabel);
 		add(enemyLabel);
 		add(enemy2Label);
@@ -192,6 +203,8 @@ public class GameMain extends JFrame implements ActionListener,KeyListener{
 	public static void main (String[] args) {
 		GameMain myGame = new GameMain();
 		myGame.setVisible(true);
+		
+		
 	}
 
 
@@ -231,7 +244,7 @@ public class GameMain extends JFrame implements ActionListener,KeyListener{
 					for (int i=0; i< map.length ; i++) {
 						for (int j=0; j< map[i].length ; j++) {
 						
-							if(bombermanPosition[i][j]==1) {
+							if(bombermanPosition[i][j]==1) { 
 								if(map[i-1][j]==0) {
 									bombermanPosition[i][j]=0;
 									bombermanPosition[i-1][j]=1;
@@ -297,7 +310,7 @@ public class GameMain extends JFrame implements ActionListener,KeyListener{
 			TimerTask task = new TimerTask(){
 				public void run() {
 					
-					
+					// checking if there is an unbreakable wall besides the bomb, if not then there is an explosion
 					for (int i=0; i< map.length ; i++) {
 						for (int j=0; j< map[i].length ; j++) {
 							
@@ -329,7 +342,8 @@ public class GameMain extends JFrame implements ActionListener,KeyListener{
 							
 						}
 					}
-					
+			
+			//Erase walls in case there was an explosion		
 					for (int i=0; i< map.length ; i++) {
 						for (int j=0; j< map[i].length ; j++) {
 							
@@ -364,7 +378,7 @@ public class GameMain extends JFrame implements ActionListener,KeyListener{
 							}
 							
 							
-							//check if there is collision with bomberman and bomb explosion
+							//check if bomberman was caught in the explosions 
 							if (((bombermanLabel.getLocation().getX()-25) == (bombLabel.getLocation().getX()-25)) 
 									&& (bombermanLabel.getLocation().getY() == (bombLabel.getLocation().getY()))) {
 								bombermanLabel.setIcon(bombermanDownImage); 
@@ -423,17 +437,25 @@ public class GameMain extends JFrame implements ActionListener,KeyListener{
 					bombLabel_right.setIcon(emptyImage);
 					bombLabel_left.setIcon(emptyImage);
 					
-					if (enemy.getAlive()==false) {
-						enemyLabel.setIcon(emptyImage);
+					if (enemy.getEnemyAlive()==false) { 
+						enemy.hide();
 					}
 					
-					if (enemy2.getAlive()==false) {
-						enemy2Label.setIcon(emptyImage);
+					if (enemy2.getEnemyAlive()==false) {
+						enemy2.hide();
 					}
 										
 					if (flag==1) {
 						JOptionPane.showMessageDialog(null, "GAME OVER!");
+						bomberman.hide();
+						enemy.hide();
+						enemy2.hide();
 					}
+					
+					
+					enemyLabel.setVisible(enemy.getVisible());
+					enemy2Label.setVisible(enemy2.getVisible());
+					bomberman.setVisible(bomberman.getVisible());
 				}
 			};
 			
@@ -463,6 +485,9 @@ public class GameMain extends JFrame implements ActionListener,KeyListener{
 		// TODO Auto-generated method stub
 		if(e.getSource() == startButton) {
 			
+			bomberman.show();
+			bombermanLabel.setVisible(bomberman.getVisible());
+			
 			if (enemy.getMoving()) {
 				//enemy is moving, stop
 				enemy.setMoving(false);
@@ -470,6 +495,8 @@ public class GameMain extends JFrame implements ActionListener,KeyListener{
 			} else {
 				//enemy is not moving. start
 				startButton.setText("Re-start");
+				enemy.show();
+				enemyLabel.setVisible(enemy.getVisible());
 				enemy.moveEnemy();
 			}
 			
@@ -480,8 +507,11 @@ public class GameMain extends JFrame implements ActionListener,KeyListener{
 			} else {
 				//enemy is not moving. start
 				startButton.setText("Re-start");
+				enemy2.show();
+				enemy2Label.setVisible(enemy2.getVisible());
 				enemy2.moveEnemy();
 			}
+			
 			
 		}
 	}
