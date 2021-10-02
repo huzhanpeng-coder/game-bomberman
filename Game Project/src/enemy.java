@@ -121,7 +121,7 @@ public class enemy extends Sprite implements Runnable{
 		if(this.r.intersects(bomberman.getRectangle())) {
 			this.bombermanAlive =false;
 			this.moving = false;
-			animationButton.setText("Run");
+			animationButton.setText("Re-start");
 			bombermanLabel.setIcon( new ImageIcon( getClass().getResource("smallninja2.png")));
 			
 		}

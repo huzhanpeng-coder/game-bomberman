@@ -447,15 +447,16 @@ public class GameMain extends JFrame implements ActionListener,KeyListener{
 										
 					if (flag==1) {
 						JOptionPane.showMessageDialog(null, "GAME OVER!");
-						bomberman.hide();
-						enemy.hide();
-						enemy2.hide();
+						
 					}
 					
+					if(enemy.getEnemyAlive()==false && enemy2.getEnemyAlive()==false) {
+						JOptionPane.showMessageDialog(null, "YOU WON!");
+					}
 					
 					enemyLabel.setVisible(enemy.getVisible());
 					enemy2Label.setVisible(enemy2.getVisible());
-					bomberman.setVisible(bomberman.getVisible());
+					
 				}
 			};
 			
@@ -487,26 +488,23 @@ public class GameMain extends JFrame implements ActionListener,KeyListener{
 			
 			bomberman.show();
 			bombermanLabel.setVisible(bomberman.getVisible());
+			bombermanLabel.setIcon(bombermanImage);
+			bomberman.setCoordinates(25, 0);
+			bombermanLabel.setLocation(bomberman.getX(), bomberman.getY());
+			enemy.setEnemyLabel(enemyLabel);
+			enemy2.setEnemyLabel(enemy2Label);
 			
-			if (enemy.getMoving()) {
-				//enemy is moving, stop
-				enemy.setMoving(false);
-				startButton.setText("Start");
-			} else {
-				//enemy is not moving. start
-				startButton.setText("Re-start");
+			startButton.setText("Re-start");
+			
+			if (!enemy.getMoving()) { //check if enemies are moving
+				//show enemies and start moving
 				enemy.show();
 				enemyLabel.setVisible(enemy.getVisible());
 				enemy.moveEnemy();
 			}
 			
-			if (enemy2.getMoving()) {
-				//enemy is moving, stop
-				enemy2.setMoving(false);
-				startButton.setText("Start");
-			} else {
-				//enemy is not moving. start
-				startButton.setText("Re-start");
+			if (!enemy2.getMoving()) { //check if enemies are moving
+				//show enemies and start moving
 				enemy2.show();
 				enemy2Label.setVisible(enemy2.getVisible());
 				enemy2.moveEnemy();
