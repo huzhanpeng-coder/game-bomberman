@@ -5,7 +5,7 @@ import javax.swing.JOptionPane;
 
 public class enemy extends Sprite implements Runnable{
 	
-	private Boolean moving, visible, enemyAlive, bombermanAlive; 
+	private Boolean moving, visible, enemyAlive, bombermanAlive,horizontal; 
 	private Thread t;
 	private JLabel enemyLabel, bombermanLabel, bombLabel;
 	private int limit = 0;
@@ -26,6 +26,7 @@ public class enemy extends Sprite implements Runnable{
 	public void setBomberman (bomber temp) {this.bomberman=temp;}
 	public void setBomb(bomb temp) {this.bomb= temp;}
 	public void setVisible(Boolean visible) {this.visible = visible;}
+	public void setEnemyAlive(Boolean temp) {this.enemyAlive=temp;}
 	public void setBombermanAlive(Boolean temp) {this.bombermanAlive=temp;}
 	
 	public void setBombEx(bomb temp, bomb temp2, bomb temp3, bomb temp4) {
@@ -50,6 +51,17 @@ public class enemy extends Sprite implements Runnable{
 		   this.direction=true;
 		   this.enemyAlive=true;
 		   this.visible=false;
+		   this.horizontal=true;
+		   this.bombermanAlive=true;
+	}
+	
+	public enemy(Boolean horizontal) {
+		   super(75,100,"enemy.png");
+		   this.moving=false;
+		   this.direction=true;
+		   this.enemyAlive=true;
+		   this.visible=false;
+		   this.horizontal=horizontal;
 		   this.bombermanAlive=true;
 	}
 	
@@ -59,6 +71,7 @@ public class enemy extends Sprite implements Runnable{
 		   this.direction=true;
 		   this.enemyAlive=true;
 		   this.enemyLabel= temp;
+		   this.horizontal=true;
 		   this.visible=false;
 		   this.bombermanAlive=true;
 	 }
@@ -82,18 +95,35 @@ public class enemy extends Sprite implements Runnable{
 			int tx= this.x;
 			int ty = this.y;
 			
+			if(horizontal) {
 			//make enemy move horizontally
-			if (direction) {
-				tx += 20;
-				limit += 20;
-				if(limit>=100) {
-					direction=false;
+				if (direction) {
+					tx += 20;
+					limit += 20;
+					if(limit>=100) {
+						direction=false;
+					}
+				} else {
+					tx -= 20;
+					limit -= 20;
+					if(limit<=-100) {
+						direction=true;
+					}
 				}
-			} else {
-				tx -= 20;
-				limit -= 20;
-				if(limit<=-100) {
-					direction=true;
+				//make enemy move vertically	
+			}else {
+				if (direction) {
+					ty += 20;
+					limit += 20;
+					if(limit>=100) {
+						direction=false;
+					}
+				} else {
+					ty -= 20;
+					limit -= 20;
+					if(limit<=-100) {
+						direction=true;
+					}
 				}
 			}
 			
