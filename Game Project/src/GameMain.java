@@ -1,5 +1,6 @@
 import java.awt.Color;
 import java.awt.Container;
+import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
@@ -12,6 +13,7 @@ import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
+import javax.swing.JPanel;
 
 public class GameMain extends JFrame implements ActionListener,KeyListener{
 
@@ -21,7 +23,7 @@ public class GameMain extends JFrame implements ActionListener,KeyListener{
 	private static final long serialVersionUID = -925518549680460124L;
 	
 	private bomber bomberman;
-	private enemy enemy,enemy2,enemy3,enemy4;
+	private enemy enemy,enemy_2,enemy_3,enemy_4;
 	private bomb bomb_ex,bomb_ex_down,bomb_ex_up,bomb_ex_left,bomb_ex_right;
 	private walls bricks;
 	private int[][] map = { {0,0,1,0,1,1,1,1,1,0,1,0},{0,2,1,0,2,0,1,2,1,0,2,0},{0,1,0,0,0,0,1,1,1,1,0,1},{0,0,0,0,2,1,0,2,1,1,0,1},{0,1,0,0,1,0,0,1,1,1,0,1},{0,2,0,1,2,1,0,2,1,1,2,1},{0,1,0,1,1,1,0,1,1,1,0,1} };
@@ -32,7 +34,9 @@ public class GameMain extends JFrame implements ActionListener,KeyListener{
 	private JButton startButton;
 	private JLabel[][] brickLabel = new JLabel[map.length][map[0].length];
 	private ImageIcon bombermanImage, bombermanDownImage,bricksImage, bricksImage2,emptyImage, bombImage, enemyImage;
-	
+	private JLabel  scoresLabel,playerLabel;
+	private String player_name="";
+	 
 	//container to hold graphics
 	private Container content;
 	
@@ -75,6 +79,7 @@ public class GameMain extends JFrame implements ActionListener,KeyListener{
 			bricks.setX(0);
 			bricks.setY(bricks.getY()+100);
 		}
+		
 		
 		/////////////////////////////////////////////////Bomberman///////////////////////////////////////////////////////
 		bomberman = new bomber();
@@ -127,44 +132,44 @@ public class GameMain extends JFrame implements ActionListener,KeyListener{
 		enemy.setBombEx(bomb_ex_right,bomb_ex_left,bomb_ex_up, bomb_ex_down);//for collision with the explosion
 		enemyLabel.setVisible(enemy.getVisible());
 		
-		enemy2 = new enemy ();
+		enemy_2 = new enemy ();
 		enemy2Label = new JLabel();
 		enemy2Label.setIcon(enemyImage); 
 		enemy2Label.setSize(enemy.getWidth(),enemy.getHeight());	
 		
-		enemy2.setEnemyLabel(enemy2Label);
-		enemy2.setBomberman(bomberman);
-		enemy2.setBombermanLabel(bombermanLabel);
-		enemy2.setBomb(bomb_ex);
-		enemy2.setBombLabel(bombLabel);
-		enemy2.setBombEx(bomb_ex_right,bomb_ex_left,bomb_ex_up, bomb_ex_down);
-		enemy2Label.setVisible(enemy2.getVisible());
+		enemy_2.setEnemyLabel(enemy2Label);
+		enemy_2.setBomberman(bomberman);
+		enemy_2.setBombermanLabel(bombermanLabel);
+		enemy_2.setBomb(bomb_ex);
+		enemy_2.setBombLabel(bombLabel);
+		enemy_2.setBombEx(bomb_ex_right,bomb_ex_left,bomb_ex_up, bomb_ex_down);
+		enemy2Label.setVisible(enemy_2.getVisible());
 		
-		enemy3 = new enemy (false);
+		enemy_3 = new enemy (false);
 		enemy3Label = new JLabel();
 		enemy3Label.setIcon(enemyImage); 
 		enemy3Label.setSize(enemy.getWidth(),enemy.getHeight());	
 		
-		enemy3.setEnemyLabel(enemy3Label);
-		enemy3.setBomberman(bomberman);
-		enemy3.setBombermanLabel(bombermanLabel);
-		enemy3.setBomb(bomb_ex);
-		enemy3.setBombLabel(bombLabel);
-		enemy3.setBombEx(bomb_ex_right,bomb_ex_left,bomb_ex_up, bomb_ex_down);
-		enemy3Label.setVisible(enemy3.getVisible());
+		enemy_3.setEnemyLabel(enemy3Label);
+		enemy_3.setBomberman(bomberman);
+		enemy_3.setBombermanLabel(bombermanLabel);
+		enemy_3.setBomb(bomb_ex);
+		enemy_3.setBombLabel(bombLabel);
+		enemy_3.setBombEx(bomb_ex_right,bomb_ex_left,bomb_ex_up, bomb_ex_down);
+		enemy3Label.setVisible(enemy_3.getVisible());
 		
-		enemy4 = new enemy (false);
+		enemy_4 = new enemy (false);
 		enemy4Label = new JLabel();
 		enemy4Label.setIcon(enemyImage); 
 		enemy4Label.setSize(enemy.getWidth(),enemy.getHeight());	
 		
-		enemy4.setEnemyLabel(enemy4Label);
-		enemy4.setBomberman(bomberman);
-		enemy4.setBombermanLabel(bombermanLabel);
-		enemy4.setBomb(bomb_ex);
-		enemy4.setBombLabel(bombLabel);
-		enemy4.setBombEx(bomb_ex_right,bomb_ex_left,bomb_ex_up, bomb_ex_down);
-		enemy4Label.setVisible(enemy4.getVisible());
+		enemy_4.setEnemyLabel(enemy4Label);
+		enemy_4.setBomberman(bomberman);
+		enemy_4.setBombermanLabel(bombermanLabel);
+		enemy_4.setBomb(bomb_ex);
+		enemy_4.setBombLabel(bombLabel);
+		enemy_4.setBombEx(bomb_ex_right,bomb_ex_left,bomb_ex_up, bomb_ex_down);
+		enemy4Label.setVisible(enemy_4.getVisible());
 		
 		/////////////////////////////////////////////////Interface///////////////////////////////////////////////////////
 		startButton = new JButton("Start");
@@ -174,21 +179,32 @@ public class GameMain extends JFrame implements ActionListener,KeyListener{
 		startButton.addActionListener(this);
 		startButton.setFocusable(false);
 		enemy.setAnimationButton(startButton);
-		enemy2.setAnimationButton(startButton);
-		enemy3.setAnimationButton(startButton);
-		enemy4.setAnimationButton(startButton);
+		enemy_2.setAnimationButton(startButton);
+		enemy_3.setAnimationButton(startButton);
+		enemy_4.setAnimationButton(startButton);
 		
 		this.addKeyListener(this);
-				
+		
+		scoresLabel = new JLabel(" SCOREBOARD ");
+		scoresLabel.setSize(100,50);
+		scoresLabel.setLocation(GameProperties.SCREEN_WIDTH-150,GameProperties.SCREEN_HEIGHT-700);
+		
+		playerLabel = new JLabel(player_name);
+		playerLabel.setSize(100,50);
+		playerLabel.setLocation(GameProperties.SCREEN_WIDTH-150,GameProperties.SCREEN_HEIGHT-600);
+		
+		add(playerLabel);
+		add(scoresLabel);
+		
 		content = getContentPane();
-		content.setBackground(Color.gray);
+		content.setBackground(Color.white);
 		setLayout(null);
 		
 		bomberman.setCoordinates(25, 0);
 		enemy.setCoordinates(125, 300);
-		enemy2.setCoordinates(425, 200);
-		enemy3.setCoordinates(625, 500);
-		enemy4.setCoordinates(1025, 300);
+		enemy_2.setCoordinates(425, 200);
+		enemy_3.setCoordinates(625, 500);
+		enemy_4.setCoordinates(1025, 300);
 		bomb_ex.setCoordinates(0, 0);
 		
 		//adding labels 		
@@ -215,9 +231,9 @@ public class GameMain extends JFrame implements ActionListener,KeyListener{
 		bombermanLabel.setLocation(bomberman.getX(), bomberman.getY());
 		
 		enemyLabel.setLocation(enemy.getX(),enemy.getY());
-		enemy2Label.setLocation(enemy2.getX(),enemy2.getY());
-		enemy3Label.setLocation(enemy3.getX(),enemy3.getY());
-		enemy3Label.setLocation(enemy4.getX(),enemy4.getY());
+		enemy2Label.setLocation(enemy_2.getX(),enemy_2.getY());
+		enemy3Label.setLocation(enemy_3.getX(),enemy_3.getY());
+		enemy3Label.setLocation(enemy_4.getX(),enemy_4.getY());
 		
 		bombLabel.setLocation(bomb_ex.getX(), bomb_ex.getY());
 		bombLabel_up.setLocation(bomb_ex_up.getX(), bomb_ex_up.getY());
@@ -466,16 +482,16 @@ public class GameMain extends JFrame implements ActionListener,KeyListener{
 						enemy.hide();
 					}
 					
-					if (enemy2.getEnemyAlive()==false) {
-						enemy2.hide();
+					if (enemy_2.getEnemyAlive()==false) {
+						enemy_2.hide();
 					}
 					
-					if (enemy3.getEnemyAlive()==false) {
-						enemy3.hide();
+					if (enemy_3.getEnemyAlive()==false) {
+						enemy_3.hide();
 					}
 					
-					if (enemy4.getEnemyAlive()==false) {
-						enemy4.hide();
+					if (enemy_4.getEnemyAlive()==false) {
+						enemy_4.hide();
 					}
 					
 					//send message if bomberman dies
@@ -484,15 +500,15 @@ public class GameMain extends JFrame implements ActionListener,KeyListener{
 					}
 					
 					//message if all enemies are down
-					if(enemy.getEnemyAlive()==false && enemy2.getEnemyAlive()==false && enemy3.getEnemyAlive()==false && enemy4.getEnemyAlive()==false) {
+					if(enemy.getEnemyAlive()==false && enemy_2.getEnemyAlive()==false && enemy_3.getEnemyAlive()==false && enemy_4.getEnemyAlive()==false) {
 						JOptionPane.showMessageDialog(null, "YOU WON!");
 						bomberman.hide();
 					}
 					
 					enemyLabel.setVisible(enemy.getVisible());
-					enemy2Label.setVisible(enemy2.getVisible());
-					enemy3Label.setVisible(enemy3.getVisible());
-					enemy4Label.setVisible(enemy4.getVisible());
+					enemy2Label.setVisible(enemy_2.getVisible());
+					enemy3Label.setVisible(enemy_3.getVisible());
+					enemy4Label.setVisible(enemy_4.getVisible());
 					
 				}
 			};
@@ -520,6 +536,25 @@ public class GameMain extends JFrame implements ActionListener,KeyListener{
 		// TODO Auto-generated method stub
 		if(e.getSource() == startButton) {
 			
+			
+			player_name = JOptionPane.showInputDialog("Enter the player's name");
+			playerLabel.setText(player_name);
+			
+			map = new int[][] { {0,0,1,0,1,1,1,1,1,0,1,0},{0,2,1,0,2,0,1,2,1,0,2,0},{0,1,0,0,0,0,1,1,1,1,0,1},{0,0,0,0,2,1,0,2,1,1,0,1},{0,1,0,0,1,0,0,1,1,1,0,1},{0,2,0,1,2,1,0,2,1,1,2,1},{0,1,0,1,1,1,0,1,1,1,0,1} };
+			
+			//setting values to the bricks label according to the map
+			for (int i=0; i< map.length ; i++) {
+				for (int j=0; j< map[i].length ; j++) {
+					if( map[i][j]==1) {
+						brickLabel[i][j].setIcon(bricksImage);
+						}else if( map[i][j]==2) {
+							brickLabel[i][j].setIcon(bricksImage2);
+						} else {
+								brickLabel[i][j].setIcon(emptyImage);
+						}
+				}
+			}
+			
 			bomberman.show();
 			bombermanLabel.setVisible(bomberman.getVisible());
 			bombermanLabel.setIcon(bombermanImage);
@@ -531,26 +566,28 @@ public class GameMain extends JFrame implements ActionListener,KeyListener{
 			enemyLabel.setIcon(enemyImage); 
 			enemy2Label.setIcon(enemyImage); 
 			enemy3Label.setIcon(enemyImage); 
+			enemy4Label.setIcon(enemyImage); 
 			
 			enemy.setEnemyLabel(enemyLabel);
-			enemy2.setEnemyLabel(enemy2Label);
-			enemy3.setEnemyLabel(enemy3Label);
+			enemy_2.setEnemyLabel(enemy2Label);
+			enemy_3.setEnemyLabel(enemy3Label);
+			enemy_4.setEnemyLabel(enemy4Label);
 			
 			enemy.show();
 			enemy.setEnemyAlive(true);
 			enemyLabel.setVisible(enemy.getVisible());
 			
-			enemy2.show();
-			enemy2.setEnemyAlive(true);
-			enemy2Label.setVisible(enemy2.getVisible());
+			enemy_2.show();
+			enemy_2.setEnemyAlive(true);
+			enemy2Label.setVisible(enemy_2.getVisible());
 			
-			enemy3.show();
-			enemy3.setEnemyAlive(true);
-			enemy3Label.setVisible(enemy3.getVisible());
+			enemy_3.show();
+			enemy_3.setEnemyAlive(true);
+			enemy3Label.setVisible(enemy_3.getVisible());
 			
-			enemy4.show();
-			enemy4.setEnemyAlive(true);
-			enemy4Label.setVisible(enemy4.getVisible());
+			enemy_4.show();
+			enemy_4.setEnemyAlive(true);
+			enemy4Label.setVisible(enemy_4.getVisible());
 
 			startButton.setText("Re-start");
 			
@@ -559,19 +596,19 @@ public class GameMain extends JFrame implements ActionListener,KeyListener{
 				enemy.moveEnemy();
 			}
 			
-			if (!enemy2.getMoving()) { //check if enemies are moving
+			if (!enemy_2.getMoving()) { //check if enemies are moving
 				//start moving
-				enemy2.moveEnemy();
+				enemy_2.moveEnemy();
 			}
 			
-			if (!enemy3.getMoving()) { //check if enemies are moving
+			if (!enemy_3.getMoving()) { //check if enemies are moving
 				//start moving
-				enemy3.moveEnemy();
+				enemy_3.moveEnemy();
 			}
 			
-			if (!enemy4.getMoving()) { //check if enemies are moving
+			if (!enemy_4.getMoving()) { //check if enemies are moving
 				//start moving
-				enemy4.moveEnemy();
+				enemy_4.moveEnemy();
 			}
 			
 			
@@ -583,7 +620,11 @@ public class GameMain extends JFrame implements ActionListener,KeyListener{
 		
 	}
 
-
+	
+	public void maze() {
+		
+	}
+	
 	@Override
 	public void keyReleased(KeyEvent e) {
 		// TODO Auto-generated method stub
