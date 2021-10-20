@@ -5,6 +5,12 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
+import java.sql.Connection;
+import java.sql.DatabaseMetaData;
+import java.sql.DriverManager;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.sql.Statement;
 import java.util.Timer;
 import java.util.TimerTask;
 
@@ -34,11 +40,13 @@ public class GameMain extends JFrame implements ActionListener,KeyListener{
 	private JButton startButton;
 	private JLabel[][] brickLabel = new JLabel[map.length][map[0].length];
 	private ImageIcon bombermanImage, bombermanDownImage,bricksImage, bricksImage2,emptyImage, bombImage, enemyImage;
-	private JLabel  scoresLabel,playerLabel;
+	private JLabel  scoreboardLabel,playerLabel,scoresLabel;
 	private String player_name="";
-	 
+	private int points, enemy1_down,enemy2_down,enemy3_down,enemy4_down; 
 	//container to hold graphics
 	private Container content;
+	private Connection conn = null;
+	private Statement stmt = null;
 	
 	//GUI setup
 	public GameMain() {
@@ -172,8 +180,8 @@ public class GameMain extends JFrame implements ActionListener,KeyListener{
 		enemy4Label.setVisible(enemy_4.getVisible());
 		
 		/////////////////////////////////////////////////Interface///////////////////////////////////////////////////////
-		startButton = new JButton("Start");
-		startButton.setSize(100,50);
+		startButton = new JButton("Start Game");
+		startButton.setSize(100,100);
 		startButton.setLocation(GameProperties.SCREEN_WIDTH-150,GameProperties.SCREEN_HEIGHT-150);
 		add(startButton);
 		startButton.addActionListener(this);
@@ -185,15 +193,20 @@ public class GameMain extends JFrame implements ActionListener,KeyListener{
 		
 		this.addKeyListener(this);
 		
-		scoresLabel = new JLabel(" SCOREBOARD ");
-		scoresLabel.setSize(100,50);
-		scoresLabel.setLocation(GameProperties.SCREEN_WIDTH-150,GameProperties.SCREEN_HEIGHT-700);
+		scoreboardLabel = new JLabel(" YOUR CURRENT SCORE ");
+		scoreboardLabel.setSize(100,50);
+		scoreboardLabel.setLocation(GameProperties.SCREEN_WIDTH-150,GameProperties.SCREEN_HEIGHT-700);
 		
 		playerLabel = new JLabel(player_name);
 		playerLabel.setSize(100,50);
 		playerLabel.setLocation(GameProperties.SCREEN_WIDTH-150,GameProperties.SCREEN_HEIGHT-600);
 		
+		scoresLabel = new JLabel();
+		scoresLabel.setSize(100,50);
+		scoresLabel.setLocation(GameProperties.SCREEN_WIDTH-100,GameProperties.SCREEN_HEIGHT-600);
+		
 		add(playerLabel);
+		add(scoreboardLabel);
 		add(scoresLabel);
 		
 		content = getContentPane();
@@ -480,23 +493,47 @@ public class GameMain extends JFrame implements ActionListener,KeyListener{
 					//hide enemy if they are caught by explosion
 					if (enemy.getEnemyAlive()==false) { 
 						enemy.hide();
+						if (enemy1_down==0) {
+							points = points + 1000;
+							scoresLabel.setText(String.valueOf(points));
+							scorepoints(points);
+							enemy1_down=1;
+						}
 					}
 					
 					if (enemy_2.getEnemyAlive()==false) {
 						enemy_2.hide();
+						if (enemy2_down==0) {
+							points = points + 1000;
+							scoresLabel.setText(String.valueOf(points));
+							scorepoints(points);
+							enemy2_down=1;
+						}
 					}
 					
 					if (enemy_3.getEnemyAlive()==false) {
 						enemy_3.hide();
+						if (enemy3_down==0) {
+							points = points + 1000;
+							scoresLabel.setText(String.valueOf(points));
+							scorepoints(points);
+							enemy3_down=1;
+						}
 					}
 					
 					if (enemy_4.getEnemyAlive()==false) {
 						enemy_4.hide();
+						if (enemy4_down==0) {
+							points = points + 1000;
+							scoresLabel.setText(String.valueOf(points));
+							scorepoints(points);
+							enemy4_down=1;
+						}
 					}
 					
 					//send message if bomberman dies
 					if (flag==1) {
-						JOptionPane.showMessageDialog(null, "You are dead. Game Over!");
+						JOptionPane.showMessageDialog(null, "Game Over!");
 					}
 					
 					//message if all enemies are down
@@ -536,8 +573,54 @@ public class GameMain extends JFrame implements ActionListener,KeyListener{
 		// TODO Auto-generated method stub
 		if(e.getSource() == startButton) {
 			
+			points = 0;
+			enemy1_down=0;
+			enemy2_down=0;
+			enemy3_down=0;
+			enemy4_down=0;
 			
 			player_name = JOptionPane.showInputDialog("Enter the player's name");
+			scoresLabel.setText(String.valueOf(points));
+			////////////////////////////Save player's name into database
+			try {
+				Class.forName("org.sqlite.JDBC");
+				System.out.println("Database Driver Loaded");
+				
+				String dbURL = "jdbc:sqlite:product.db";
+				conn = DriverManager.getConnection(dbURL);
+				
+				if (conn != null) {
+					System.out.println("Connected to database");
+					conn.setAutoCommit(false);
+					
+					stmt = conn.createStatement();
+					
+					String sql = "CREATE TABLE IF NOT EXISTS SCORES " +
+					             "(ID INTEGER PRIMARY KEY AUTOINCREMENT, " +
+							     " NAME TEXT NOT NULL, " + 
+					             " SCORE INT NOT NULL) ";
+					
+					stmt.executeUpdate(sql);
+					conn.commit();
+					System.out.println("Table Created Successfully");
+					
+					sql = "INSERT INTO SCORES (NAME, SCORE) VALUES " + 
+	                        "('"+ player_name+"', 0)";
+					stmt.executeUpdate(sql);
+					conn.commit();
+										
+					conn.close();
+				}
+				
+			} catch (ClassNotFoundException e1) {
+				e1.printStackTrace();
+			} catch (SQLException e1) {
+				e1.printStackTrace();
+			} catch (Exception e1) {
+				e1.printStackTrace();
+			}
+			
+			//Display player name into scoreboard
 			playerLabel.setText(player_name);
 			
 			map = new int[][] { {0,0,1,0,1,1,1,1,1,0,1,0},{0,2,1,0,2,0,1,2,1,0,2,0},{0,1,0,0,0,0,1,1,1,1,0,1},{0,0,0,0,2,1,0,2,1,1,0,1},{0,1,0,0,1,0,0,1,1,1,0,1},{0,2,0,1,2,1,0,2,1,1,2,1},{0,1,0,1,1,1,0,1,1,1,0,1} };
@@ -621,8 +704,16 @@ public class GameMain extends JFrame implements ActionListener,KeyListener{
 	}
 
 	
-	public void maze() {
-		
+	public static void DisplayRecords(ResultSet rs) throws SQLException {
+		while ( rs.next() ) {
+			int id = rs.getInt("id");
+			String name = rs.getString("name");
+			int score = rs.getInt("score");
+			
+			System.out.println("ID = " + id);
+			System.out.println("name = " + name);
+			System.out.println("score = " + score);
+		}
 	}
 	
 	@Override
@@ -631,7 +722,39 @@ public class GameMain extends JFrame implements ActionListener,KeyListener{
 		
 	}
 
-
+	public void scorepoints(int current_score) {
+		try {
+			Class.forName("org.sqlite.JDBC");
+			System.out.println("Database Driver Loaded");
+			
+			String dbURL = "jdbc:sqlite:product.db";
+			conn = DriverManager.getConnection(dbURL);
+			
+			if (conn != null) {
+				System.out.println("Connected to database");
+				conn.setAutoCommit(false);
+				
+				stmt = conn.createStatement();
+				
+				String sql ="UPDATE SCORES SET SCORE = "+current_score+" WHERE NAME='"+player_name +"'"; 
+                
+				stmt.executeUpdate(sql);
+				conn.commit();
+				
+				ResultSet rs = stmt.executeQuery("SELECT * FROM SCORES WHERE NAME='"+player_name +"'");
+				DisplayRecords(rs);
+				rs.close();
+				
+				conn.close();
+			}
+		} catch (ClassNotFoundException e) {
+			e.printStackTrace();
+		} catch (SQLException e) {
+			e.printStackTrace();
+		} catch (Exception e) {
+			e.printStackTrace();
+		}	
+	}
 	
 
 
