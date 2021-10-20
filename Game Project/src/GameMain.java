@@ -654,7 +654,7 @@ public class GameMain extends JFrame implements ActionListener,KeyListener{
 		String[] id_array = new String[1] ;
 		String[] name_array = new String[1];
 		String[] score_array = new String[1];
-		String[] value = new String[1];
+		
 		int counter= 0;
 		
 		try {
@@ -686,7 +686,7 @@ public class GameMain extends JFrame implements ActionListener,KeyListener{
 				id_array = new String [counter];
 				name_array = new String [counter];
 				score_array = new String [counter];
-				value = new String [counter];
+				
 				counter = 0;
 				
 				while ( rs.next() ) {
@@ -694,7 +694,6 @@ public class GameMain extends JFrame implements ActionListener,KeyListener{
 					int id = rs.getInt("id");
 					String name = rs.getString("name");
 					int score = rs.getInt("score");
-					System.out.println("ID = " + id);
 					id_array[counter] = String.valueOf(id);
 					name_array[counter] = name;
 					score_array[counter] = String.valueOf(score);
@@ -712,16 +711,26 @@ public class GameMain extends JFrame implements ActionListener,KeyListener{
 			e.printStackTrace();
 		}
 		
+		StringBuilder sb = new StringBuilder(64);
+		
+		String[] record = new String[5];
+		
 		for (int i=0; i<5; i++) {
-			System.out.println(id_array[i]);
-			System.out.println(name_array[i]);
-			System.out.println(score_array[i]);
+			record[i] = String.valueOf(id_array[i]) + String.valueOf(name_array[i]) + String.valueOf(score_array[i]);
 		}
 		
+		sb.append("<html><table><tr><td>Player</td><td>Name</td><td>Score</td></tr>");
+	    
+	    for (int i=0; i<5; i++) {
+	    	sb.append("<tr>");
+	    	sb.append("<td>").append(record[i]).append("</td>");
+	    	sb.append("</tr>");
+	    }
+	    
+	    sb.append("</table></html>");
+	    
+		JOptionPane.showMessageDialog(null, sb);
 		
-		
-		
-		//JOptionPane.showMessageDialog(null, "YOU WON!");
 	}
 	
 		
