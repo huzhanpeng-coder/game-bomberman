@@ -30,10 +30,11 @@ public class GameMain extends JFrame implements ActionListener,KeyListener{
 	
 	private bomber bomberman;
 	private enemy enemy,enemy_2,enemy_3,enemy_4;
+	
 	private bomb bomb_ex,bomb_ex_down,bomb_ex_up,bomb_ex_left,bomb_ex_right;
 	private walls bricks;
 	private int[][] map = { {0,0,1,0,1,1,1,1,1,0,1,0},{0,2,1,0,2,0,1,2,1,0,2,0},{0,1,0,0,0,0,1,1,1,1,0,1},{0,0,0,0,2,1,0,2,1,1,0,1},{0,1,0,0,1,0,0,1,1,1,0,1},{0,2,0,1,2,1,0,2,1,1,2,1},{0,1,0,1,1,1,0,1,1,1,0,1} };
-	private int[][]bombermanPosition = {{1,0,0,0,0,0,0,0,0,0,0,0},{0,0,0,0,0,0,0,0,0,0,0,0},{0,0,0,0,0,0,0,0,0,0,0,0},{0,0,0,0,0,0,0,0,0,0,0,0},{0,0,0,0,0,0,0,0,0,0,0,0},{0,0,0,0,0,0,0,0,0,0,0,0},{0,0,0,0,0,0,0,0,0,0,0,0}};
+	private int[][]bombermanPosition = new int [7][12];
 	private int flag=0; //flag to identify when the game is over 
 	//labels to show the graphics
 	private JLabel bombermanLabel,enemyLabel, enemy2Label, enemy3Label, enemy4Label, bombLabel,bombLabel_up,bombLabel_down,bombLabel_right,bombLabel_left;
@@ -52,7 +53,7 @@ public class GameMain extends JFrame implements ActionListener,KeyListener{
 	public GameMain() {
 		super("Bomberman");
 		setSize(GameProperties.SCREEN_WIDTH, GameProperties.SCREEN_HEIGHT);
-		
+		bombermanPosition[0][0]=1;
 		/////////////////////////////////////////////////Maze///////////////////////////////////////////////////////
 		bricks = new walls();
 		bricksImage = new ImageIcon( getClass().getResource( bricks.getFilename() ) );
@@ -193,9 +194,9 @@ public class GameMain extends JFrame implements ActionListener,KeyListener{
 		
 		this.addKeyListener(this);
 		
-		scoreboardLabel = new JLabel(" YOUR CURRENT SCORE ");
+		scoreboardLabel = new JLabel("<html><body><center>CURRENT<br>SCORE</center></body></html>");
 		scoreboardLabel.setSize(100,50);
-		scoreboardLabel.setLocation(GameProperties.SCREEN_WIDTH-150,GameProperties.SCREEN_HEIGHT-700);
+		scoreboardLabel.setLocation(GameProperties.SCREEN_WIDTH-130,GameProperties.SCREEN_HEIGHT-700);
 		
 		playerLabel = new JLabel(player_name);
 		playerLabel.setSize(100,50);
@@ -496,7 +497,8 @@ public class GameMain extends JFrame implements ActionListener,KeyListener{
 						if (enemy1_down==0) {
 							points = points + 1000;
 							scoresLabel.setText(String.valueOf(points));
-							scorepoints(points);
+							scorePoints(points);
+							displayAllScores();
 							enemy1_down=1;
 						}
 					}
@@ -506,7 +508,7 @@ public class GameMain extends JFrame implements ActionListener,KeyListener{
 						if (enemy2_down==0) {
 							points = points + 1000;
 							scoresLabel.setText(String.valueOf(points));
-							scorepoints(points);
+							scorePoints(points);
 							enemy2_down=1;
 						}
 					}
@@ -516,7 +518,7 @@ public class GameMain extends JFrame implements ActionListener,KeyListener{
 						if (enemy3_down==0) {
 							points = points + 1000;
 							scoresLabel.setText(String.valueOf(points));
-							scorepoints(points);
+							scorePoints(points);
 							enemy3_down=1;
 						}
 					}
@@ -526,7 +528,7 @@ public class GameMain extends JFrame implements ActionListener,KeyListener{
 						if (enemy4_down==0) {
 							points = points + 1000;
 							scoresLabel.setText(String.valueOf(points));
-							scorepoints(points);
+							scorePoints(points);
 							enemy4_down=1;
 						}
 					}
@@ -540,6 +542,7 @@ public class GameMain extends JFrame implements ActionListener,KeyListener{
 					if(enemy.getEnemyAlive()==false && enemy_2.getEnemyAlive()==false && enemy_3.getEnemyAlive()==false && enemy_4.getEnemyAlive()==false) {
 						JOptionPane.showMessageDialog(null, "YOU WON!");
 						bomberman.hide();
+						
 					}
 					
 					enemyLabel.setVisible(enemy.getVisible());
@@ -594,6 +597,10 @@ public class GameMain extends JFrame implements ActionListener,KeyListener{
 					conn.setAutoCommit(false);
 					
 					stmt = conn.createStatement();
+										
+					//String sql = "DROP TABLE SCORES";
+					//stmt.executeUpdate(sql);
+					//conn.commit();
 					
 					String sql = "CREATE TABLE IF NOT EXISTS SCORES " +
 					             "(ID INTEGER PRIMARY KEY AUTOINCREMENT, " +
@@ -642,7 +649,8 @@ public class GameMain extends JFrame implements ActionListener,KeyListener{
 			bombermanLabel.setVisible(bomberman.getVisible());
 			bombermanLabel.setIcon(bombermanImage);
 			bomberman.setCoordinates(25, 0);
-			bombermanPosition = new int [][]{{1,0,0,0,0,0,0,0,0,0,0,0},{0,0,0,0,0,0,0,0,0,0,0,0},{0,0,0,0,0,0,0,0,0,0,0,0},{0,0,0,0,0,0,0,0,0,0,0,0},{0,0,0,0,0,0,0,0,0,0,0,0},{0,0,0,0,0,0,0,0,0,0,0,0},{0,0,0,0,0,0,0,0,0,0,0,0}};
+			bombermanPosition = new int [7][12];
+			bombermanPosition[0][0] = 1; 
 			bombermanLabel.setLocation(bomberman.getX(), bomberman.getY());
 			flag=0;
 			
@@ -703,48 +711,24 @@ public class GameMain extends JFrame implements ActionListener,KeyListener{
 		
 	}
 
-	
-	public static void DisplayRecords(ResultSet rs) throws SQLException {
-		while ( rs.next() ) {
-			int id = rs.getInt("id");
-			String name = rs.getString("name");
-			int score = rs.getInt("score");
-			
-			System.out.println("ID = " + id);
-			System.out.println("name = " + name);
-			System.out.println("score = " + score);
-		}
-	}
-	
 	@Override
 	public void keyReleased(KeyEvent e) {
 		// TODO Auto-generated method stub
 		
 	}
 
-	public void scorepoints(int current_score) {
+	public void scorePoints(int current_score) {
 		try {
 			Class.forName("org.sqlite.JDBC");
-			System.out.println("Database Driver Loaded");
-			
 			String dbURL = "jdbc:sqlite:product.db";
 			conn = DriverManager.getConnection(dbURL);
 			
 			if (conn != null) {
-				System.out.println("Connected to database");
 				conn.setAutoCommit(false);
-				
 				stmt = conn.createStatement();
-				
 				String sql ="UPDATE SCORES SET SCORE = "+current_score+" WHERE NAME='"+player_name +"'"; 
-                
-				stmt.executeUpdate(sql);
+                stmt.executeUpdate(sql);
 				conn.commit();
-				
-				ResultSet rs = stmt.executeQuery("SELECT * FROM SCORES WHERE NAME='"+player_name +"'");
-				DisplayRecords(rs);
-				rs.close();
-				
 				conn.close();
 			}
 		} catch (ClassNotFoundException e) {
@@ -756,6 +740,80 @@ public class GameMain extends JFrame implements ActionListener,KeyListener{
 		}	
 	}
 	
-
-
+	public void displayAllScores() {
+		
+		String[] id_array = new String[1] ;
+		String[] name_array = new String[1];
+		String[] score_array = new String[1];
+		String[] value = new String[1];
+		int counter= 0;
+		
+		try {
+			Class.forName("org.sqlite.JDBC");
+			String dbURL = "jdbc:sqlite:product.db";
+			conn = DriverManager.getConnection(dbURL);
+			
+			if (conn != null) {
+				conn.setAutoCommit(false);
+				stmt = conn.createStatement();
+				String sql ="SELECT * FROM SCORES ORDER BY SCORE DESC"; 
+                ResultSet rs = stmt.executeQuery(sql);
+				while ( rs.next() ) {
+					counter=counter+1;
+				}
+				rs.close();
+			}
+			
+			if (conn != null) {
+				System.out.println("Connected to database");
+				conn.setAutoCommit(false);
+				
+				stmt = conn.createStatement();
+				
+				String sql ="SELECT * FROM SCORES ORDER BY SCORE DESC"; 
+                
+				ResultSet rs = stmt.executeQuery(sql);
+				
+				id_array = new String [counter];
+				name_array = new String [counter];
+				score_array = new String [counter];
+				value = new String [counter];
+				counter = 0;
+				
+				while ( rs.next() ) {
+					
+					int id = rs.getInt("id");
+					String name = rs.getString("name");
+					int score = rs.getInt("score");
+					System.out.println("ID = " + id);
+					id_array[counter] = String.valueOf(id);
+					name_array[counter] = name;
+					score_array[counter] = String.valueOf(score);
+					counter=counter+1;
+				}
+				
+				rs.close();
+				conn.close();
+			}
+		} catch (ClassNotFoundException e) {
+			e.printStackTrace();
+		} catch (SQLException e) {
+			e.printStackTrace();
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		
+		for (int i=0; i<5; i++) {
+			System.out.println(id_array[i]);
+			System.out.println(name_array[i]);
+			System.out.println(score_array[i]);
+		}
+		
+		
+		
+		
+		//JOptionPane.showMessageDialog(null, "YOU WON!");
+	}
+	
+		
 }
