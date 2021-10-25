@@ -1,3 +1,9 @@
+import java.sql.DriverManager;
+import java.sql.ResultSet;
+import java.sql.Connection;
+import java.sql.SQLException;
+import java.sql.Statement;
+
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JLabel;
@@ -5,14 +11,15 @@ import javax.swing.JOptionPane;
 
 public class enemy extends Sprite implements Runnable{
 	
-	private Boolean moving, visible, enemyAlive, bombermanAlive,horizontal; 
+	private Boolean moving, visible, enemyAlive, bombermanAlive,horizontal, direction; 
 	private Thread t;
 	private JLabel enemyLabel, bombermanLabel, bombLabel;
 	private int limit = 0;
-	private Boolean direction;
 	private JButton animationButton;
 	private bomber bomberman;
 	private bomb bomb, bomb_ex_right, bomb_ex_left, bomb_ex_up, bomb_ex_down;
+	private Connection conn = null;
+	private Statement stmt = null;
 	
 	public Boolean getMoving() {return moving;}
 	public Boolean getEnemyAlive() {return enemyAlive;} 
@@ -159,7 +166,8 @@ public class enemy extends Sprite implements Runnable{
 	
 	private void gameEnd() {
 		if(this.bombermanAlive == false) {
-			JOptionPane.showMessageDialog(null, "GAME OVER!");
+			JOptionPane.showMessageDialog(null, "You died! Better luck next time!", "GAME OVER!", JOptionPane.INFORMATION_MESSAGE);
+			displayAllScores();
 			this.bombermanAlive = true;
 		}
 		
@@ -181,6 +189,88 @@ public class enemy extends Sprite implements Runnable{
 			enemyLabel.setIcon( new ImageIcon( getClass().getResource("enemy2.png")));
 			
 		}
+		
+	}
+	
+	private void displayAllScores() {
+		
+		String[] id_array = new String[1] ;
+		String[] name_array = new String[1];
+		String[] score_array = new String[1];
+		
+		int counter= 0;
+		
+		try {
+			Class.forName("org.sqlite.JDBC");
+			String dbURL = "jdbc:sqlite:product.db";
+			conn = DriverManager.getConnection(dbURL);
+			
+			if (conn != null) {
+				conn.setAutoCommit(false);
+				stmt = conn.createStatement();
+				String sql ="SELECT * FROM SCORES ORDER BY SCORE DESC"; 
+                ResultSet rs = stmt.executeQuery(sql);
+				while ( rs.next() ) {
+					counter=counter+1;
+				}
+				rs.close();
+			}
+			
+			if (conn != null) {
+				System.out.println("Connected to database");
+				conn.setAutoCommit(false);
+				
+				stmt = conn.createStatement();
+				
+				String sql ="SELECT * FROM SCORES ORDER BY SCORE DESC"; 
+                
+				ResultSet rs = stmt.executeQuery(sql);
+				
+				id_array = new String [counter];
+				name_array = new String [counter];
+				score_array = new String [counter];
+				
+				counter = 0;
+				
+				while ( rs.next() ) {
+					
+					int id = rs.getInt("id");
+					String name = rs.getString("name");
+					int score = rs.getInt("score");
+					id_array[counter] = String.valueOf(id);
+					name_array[counter] = name;
+					score_array[counter] = String.valueOf(score);
+					counter=counter+1;
+				}
+				
+				rs.close();
+				conn.close();
+			}
+		} catch (ClassNotFoundException e) {
+			e.printStackTrace();
+		} catch (SQLException e) {
+			e.printStackTrace();
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		
+		StringBuilder sb = new StringBuilder(64);
+		
+		String[] record = new String[5];
+		
+		for (int i=0; i<5; i++) {
+			record[i] = "<td>" + String.valueOf(id_array[i]) + "</td><td>"+ String.valueOf(name_array[i]) + "</td><td>" + String.valueOf(score_array[i]) + "</td>";
+		}
+		
+		sb.append("<html><table><tr><td>Player</td><td>Name</td><td>Score</td></tr>");
+	    
+	    for (int i=0; i<5; i++) {
+	    	sb.append("<tr>").append(record[i]).append("</tr>");
+	    }
+	    
+	    sb.append("</table></html>");
+	    
+		JOptionPane.showMessageDialog(null, sb, "Top Scores", JOptionPane.INFORMATION_MESSAGE);
 		
 	}
 	

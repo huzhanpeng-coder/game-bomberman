@@ -158,10 +158,9 @@ public class GameMain extends JFrame implements ActionListener,KeyListener{
 		add(startButton);
 		startButton.addActionListener(this);
 		startButton.setFocusable(false);
-		enemy[0].setAnimationButton(startButton);
-		enemy[1].setAnimationButton(startButton);
-		enemy[2].setAnimationButton(startButton);
-		enemy[3].setAnimationButton(startButton);
+		for (int i =0; i<4 ; i++) {
+			enemy[i].setAnimationButton(startButton);
+		}
 		
 		this.addKeyListener(this);
 		
@@ -175,7 +174,7 @@ public class GameMain extends JFrame implements ActionListener,KeyListener{
 		
 		scoresLabel = new JLabel();
 		scoresLabel.setSize(100,50);
-		scoresLabel.setLocation(GameProperties.SCREEN_WIDTH-100,GameProperties.SCREEN_HEIGHT-600);
+		scoresLabel.setLocation(GameProperties.SCREEN_WIDTH-150,GameProperties.SCREEN_HEIGHT-550);
 		
 		add(playerLabel);
 		add(scoreboardLabel);
@@ -470,7 +469,6 @@ public class GameMain extends JFrame implements ActionListener,KeyListener{
 								points = points + 1000;
 								scoresLabel.setText(String.valueOf(points));
 								scorePoints(points);
-								displayAllScores();
 								enemy_down[i]=1;
 							}
 						}
@@ -478,12 +476,15 @@ public class GameMain extends JFrame implements ActionListener,KeyListener{
 					
 					//send message if bomberman dies
 					if (flag==1) {
-						JOptionPane.showMessageDialog(null, "Game Over!");
+						JOptionPane.showMessageDialog(null, "You died! Better luck next time!", "GAME OVER!", JOptionPane.INFORMATION_MESSAGE);
+						displayAllScores();
+						bomberman.hide();
 					}
 					
 					//message if all enemies are down
 					if(enemy[0].getEnemyAlive()==false && enemy[1].getEnemyAlive()==false && enemy[2].getEnemyAlive()==false && enemy[3].getEnemyAlive()==false) {
-						JOptionPane.showMessageDialog(null, "YOU WON!");
+						JOptionPane.showMessageDialog(null, "YOU WON!", "CONGRATULATIONS!", JOptionPane.INFORMATION_MESSAGE);
+						displayAllScores();
 						bomberman.hide();
 						
 					}
@@ -716,20 +717,18 @@ public class GameMain extends JFrame implements ActionListener,KeyListener{
 		String[] record = new String[5];
 		
 		for (int i=0; i<5; i++) {
-			record[i] = String.valueOf(id_array[i]) + String.valueOf(name_array[i]) + String.valueOf(score_array[i]);
+			record[i] = "<td>" + String.valueOf(id_array[i]) + "</td><td>"+ String.valueOf(name_array[i]) + "</td><td>" + String.valueOf(score_array[i]) + "</td>";
 		}
 		
 		sb.append("<html><table><tr><td>Player</td><td>Name</td><td>Score</td></tr>");
 	    
 	    for (int i=0; i<5; i++) {
-	    	sb.append("<tr>");
-	    	sb.append("<td>").append(record[i]).append("</td>");
-	    	sb.append("</tr>");
+	    	sb.append("<tr>").append(record[i]).append("</tr>");
 	    }
 	    
 	    sb.append("</table></html>");
 	    
-		JOptionPane.showMessageDialog(null, sb);
+		JOptionPane.showMessageDialog(null, sb, "Top Scores", JOptionPane.INFORMATION_MESSAGE);
 		
 	}
 	
