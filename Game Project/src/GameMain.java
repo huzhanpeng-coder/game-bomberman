@@ -637,13 +637,18 @@ public class GameMain extends JFrame implements ActionListener,KeyListener{
 		
 		String[] record = new String[5];
 		
-		for (int i=0; i<5; i++) {
+		if(counter>5) {counter=5;}
+		
+		for (int i=0; i<counter; i++) {
+		
 			record[i] = "<td>" + String.valueOf(id_array[i]) + "</td><td>"+ String.valueOf(name_array[i]) + "</td><td>" + String.valueOf(score_array[i]) + "</td>";
+		
 		}
 		
 		sb.append("<html><table><tr><td>Player</td><td>Name</td><td>Score</td></tr>");
 	    
-	    for (int i=0; i<5; i++) {
+		
+	    for (int i=0; i<counter; i++) {
 	    	sb.append("<tr>").append(record[i]).append("</tr>");
 	    }
 	    
