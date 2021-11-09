@@ -160,7 +160,6 @@ public class enemy extends Sprite implements Runnable{
 			this.moving = false;
 			animationButton.setText("Re-start");
 			bombermanLabel.setIcon( new ImageIcon( getClass().getResource("smallninja2.png")));
-			
 		}
 	}
 	
@@ -168,6 +167,7 @@ public class enemy extends Sprite implements Runnable{
 		if(this.bombermanAlive == false) {
 			JOptionPane.showMessageDialog(null, "You died! Better luck next time!", "GAME OVER!", JOptionPane.INFORMATION_MESSAGE);
 			displayAllScores();
+			this.bombermanLabel.setVisible(false);
 			this.bombermanAlive = true;
 		}
 		

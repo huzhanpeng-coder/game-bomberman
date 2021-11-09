@@ -399,14 +399,14 @@ public class GameMain extends JFrame implements ActionListener,KeyListener{
 					if (flag==1) {
 						JOptionPane.showMessageDialog(null, "You died! Better luck next time!", "GAME OVER!", JOptionPane.INFORMATION_MESSAGE);
 						displayAllScores();
-						bomberman.hide();
+						bombermanLabel.setVisible(false);
 					}
 					
 					//message if all enemies are down
 					if(enemy[0].getEnemyAlive()==false && enemy[1].getEnemyAlive()==false && enemy[2].getEnemyAlive()==false && enemy[3].getEnemyAlive()==false) {
 						JOptionPane.showMessageDialog(null, "YOU WON!", "CONGRATULATIONS!", JOptionPane.INFORMATION_MESSAGE);
 						displayAllScores();
-						bomberman.hide();
+						bombermanLabel.setVisible(false);
 						
 					}
 					
