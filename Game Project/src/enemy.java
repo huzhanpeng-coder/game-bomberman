@@ -14,7 +14,7 @@ public class enemy extends Sprite implements Runnable{
 	private Boolean moving, visible, enemyAlive, bombermanAlive,horizontal, direction; 
 	private Thread t;
 	private JLabel enemyLabel, bombermanLabel, bombLabel;
-	private int limit = 0;
+	private int limit = 0,flag=0;
 	private JButton animationButton;
 	private bomber bomberman;
 	private bomb bomb, bomb_ex_right, bomb_ex_left, bomb_ex_up, bomb_ex_down;
@@ -24,6 +24,7 @@ public class enemy extends Sprite implements Runnable{
 	public Boolean getMoving() {return moving;}
 	public Boolean getEnemyAlive() {return enemyAlive;} 
 	public int getLimit() {return limit;}
+	public int getFlag() {return flag;}
 	public Boolean getBombermanAlive() {return bombermanAlive;}
 	public Boolean getVisible() {return visible;}
 	
@@ -31,6 +32,7 @@ public class enemy extends Sprite implements Runnable{
 	
 	//Work with bomb, bomb explosion and bomberman features
 	public void setBomberman (bomber temp) {this.bomberman=temp;}
+	public void setFlag (int temp) {this.flag=temp;}
 	public void setBomb(bomb temp) {this.bomb= temp;}
 	public void setVisible(Boolean visible) {this.visible = visible;}
 	public void setEnemyAlive(Boolean temp) {this.enemyAlive=temp;}
@@ -157,7 +159,6 @@ public class enemy extends Sprite implements Runnable{
 	private void detectBombermanCollision() {
 		if(this.r.intersects(bomberman.getRectangle())) {
 			this.bombermanAlive =false;
-			this.moving = false;
 			animationButton.setText("Re-start");
 			bombermanLabel.setIcon( new ImageIcon( getClass().getResource("smallninja2.png")));
 		}
@@ -165,8 +166,11 @@ public class enemy extends Sprite implements Runnable{
 	
 	private void gameEnd() {
 		if(this.bombermanAlive == false) {
-			JOptionPane.showMessageDialog(null, "You died! Better luck next time!", "GAME OVER!", JOptionPane.INFORMATION_MESSAGE);
-			displayAllScores();
+			if (this.flag==0) {
+				JOptionPane.showMessageDialog(null, "You died! Better luck next time!", "GAME OVER!", JOptionPane.INFORMATION_MESSAGE);
+				displayAllScores();
+				this.flag=1;
+			}
 			this.bombermanLabel.setVisible(false);
 			this.bombermanAlive = true;
 		}

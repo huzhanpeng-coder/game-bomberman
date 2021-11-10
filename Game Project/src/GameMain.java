@@ -523,6 +523,7 @@ public class GameMain extends JFrame implements ActionListener,KeyListener{
 				enemy[i].show();
 				enemy[i].setEnemyAlive(true);
 				enemyLabel[i].setVisible(enemy[i].getVisible());
+				enemy[i].setFlag(0);
 			}
 			
 			startButton.setText("Re-start");
